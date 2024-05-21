@@ -29,7 +29,7 @@ interface BackstageProps {
   customFields: CustomFields;
   isMirrored: boolean;
   eventNow: OntimeEvent | null;
-  eventNext: OntimeEvent | null;
+  eventNext: OntimeEvent[] | null;
   time: ViewExtendedTimer;
   backstageEvents: OntimeEvent[];
   selectedId: string | null;
@@ -85,7 +85,7 @@ export default function Backstage(props: BackstageProps) {
   const showProgress = time.playback !== 'stop';
 
   const secondarySource = searchParams.get('secondary-src');
-  const secondaryTextNext = getPropertyValue(eventNext, secondarySource);
+  const secondaryTextNext = getPropertyValue(eventNext?.[0] ?? null, secondarySource);
   const secondaryTextNow = getPropertyValue(eventNow, secondarySource);
 
   let stageTimer = millisToString(time.current, { fallback: timerPlaceholderMin });
@@ -150,7 +150,7 @@ export default function Backstage(props: BackstageProps) {
         </AnimatePresence>
 
         <AnimatePresence>
-          {eventNext && (
+          {eventNext?.[0] && (
             <motion.div
               className='event next'
               key='next'
@@ -159,7 +159,7 @@ export default function Backstage(props: BackstageProps) {
               animate='visible'
               exit='exit'
             >
-              <TitleCard label='next' title={eventNext.title} secondary={secondaryTextNext} />
+              <TitleCard label='next' title={eventNext[0].title} secondary={secondaryTextNext} />
             </motion.div>
           )}
         </AnimatePresence>

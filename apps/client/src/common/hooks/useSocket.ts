@@ -7,7 +7,7 @@ export const useRundownEditor = () => {
   const featureSelector = (state: RuntimeStore) => ({
     playback: state.timer.playback,
     selectedEventId: state.eventNow?.id ?? null,
-    nextEventId: state.eventNext?.id ?? null,
+    nextEventId: state.eventNext?.[0]?.id ?? null,
   });
 
   return useRuntimeStore(featureSelector);

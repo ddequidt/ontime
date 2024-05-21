@@ -3,7 +3,7 @@ import { useTranslation } from '../../../translation/TranslationProvider';
 import './TitleCard.scss';
 
 interface TitleCardProps {
-  label: 'now' | 'next';
+  label: 'now' | 'next' | 'next2';
   title: string;
   secondary?: string;
 }

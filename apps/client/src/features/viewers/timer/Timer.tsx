@@ -44,7 +44,7 @@ const titleVariants = {
 
 interface TimerProps {
   customFields: CustomFields;
-  eventNext: OntimeEvent | null;
+  eventNext: OntimeEvent[] | null;
   eventNow: OntimeEvent | null;
   external: Message;
   isMirrored: boolean;
@@ -99,7 +99,8 @@ export default function Timer(props: TimerProps) {
 
   const secondarySource = searchParams.get('secondary-src');
   const secondaryTextNow = getPropertyValue(eventNow, secondarySource);
-  const secondaryTextNext = getPropertyValue(eventNext, secondarySource);
+  const secondaryTextNext = getPropertyValue(eventNext?.[0] ?? null, secondarySource);
+  const secondaryTextNext2 = getPropertyValue(eventNext?.[1] ?? null, secondarySource);
 
   const showOverlay = pres.text !== '' && pres.visible;
   const isPlaying = time.playback !== Playback.Pause;
@@ -215,7 +216,7 @@ export default function Timer(props: TimerProps) {
           </AnimatePresence>
 
           <AnimatePresence>
-            {eventNext?.title && (
+            {eventNext?.[0]?.title && (
               <motion.div
                 className='event next'
                 key='next'
@@ -224,7 +225,22 @@ export default function Timer(props: TimerProps) {
                 animate='visible'
                 exit='exit'
               >
-                <TitleCard label='next' title={eventNext.title} secondary={secondaryTextNext} />
+                <TitleCard label='next' title={eventNext[0].title} secondary={secondaryTextNext} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {eventNext?.[1]?.title && (
+              <motion.div
+                className='event next2'
+                key='next2'
+                variants={titleVariants}
+                initial='hidden'
+                animate='visible'
+                exit='exit'
+              >
+                <TitleCard label='next2' title={eventNext[1].title} secondary={secondaryTextNext2} />
               </motion.div>
             )}
           </AnimatePresence>

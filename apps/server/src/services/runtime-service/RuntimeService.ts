@@ -124,7 +124,7 @@ class RuntimeService {
     const state = runtimeState.getState();
     const now = state.eventNow?.id;
     const nowPublic = state.publicEventNow?.id;
-    const next = state.eventNext?.id;
+    const next = state.eventNext?.[0]?.id;
     const nextPublic = state.publicEventNext?.id;
     return (
       affectedIds.includes(now) ||
@@ -138,7 +138,7 @@ class RuntimeService {
     const timedEvents = getPlayableEvents();
     const state = runtimeState.getState();
     const now = state.eventNow?.id;
-    const next = state.eventNext?.id;
+    const next = state.eventNext?.[0]?.id;
 
     // check whether the index of now and next are consecutive
     const indexNow = timedEvents.findIndex((event) => event.id === now);
@@ -570,8 +570,15 @@ function broadcastResult(_target: any, _propertyKey: string, descriptor: Propert
 
     // Helper function to update an event if it has changed
     function updateEventIfChanged(eventKey: keyof RuntimeStore, state: runtimeState.RuntimeState) {
-      const previous = RuntimeService.previousState?.[eventKey];
-      const now = state[eventKey];
+      let previous = RuntimeService.previousState?.[eventKey];
+      let now = state[eventKey];
+
+      if (Array.isArray(previous)) {
+        previous = previous[0];
+      }
+      if (Array.isArray(now)) {
+        now = now[0];
+      }
 
       // if there was nothing, and there is nothing, noop
       if (!previous?.id && !now?.id) {

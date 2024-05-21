@@ -41,7 +41,7 @@ export type RuntimeState = {
   clock: number; // realtime clock
   eventNow: OntimeEvent | null;
   publicEventNow: OntimeEvent | null;
-  eventNext: OntimeEvent | null;
+  eventNext: OntimeEvent[] | null;
   publicEventNext: OntimeEvent | null;
   runtime: Runtime;
   timer: TimerState;
@@ -203,24 +203,25 @@ export function loadNext(playableEvents: OntimeEvent[]) {
   const numEvents = playableEvents.length;
 
   if (runtimeState.runtime.selectedEventIndex < numEvents - 1) {
-    let nextPublic = false;
-    let nextProduction = false;
+    let nextPublic = true;
+    let nextProduction = 0;
 
+    runtimeState.eventNext = [];
     for (let i = runtimeState.runtime.selectedEventIndex + 1; i < numEvents; i++) {
       // if we have not set private
-      if (!nextProduction) {
-        runtimeState.eventNext = playableEvents[i];
-        nextProduction = true;
+      if (nextProduction < 2) {
+        runtimeState.eventNext.push(playableEvents[i]);
+        nextProduction++;
       }
 
       // if event is public
-      if (playableEvents[i].isPublic) {
+      if (!nextPublic && playableEvents[i].isPublic) {
         runtimeState.publicEventNext = playableEvents[i];
         nextPublic = true;
       }
 
       // Stop if both are set
-      if (nextPublic && nextProduction) break;
+      if (nextPublic && nextProduction === 2) break;
     }
   }
 }

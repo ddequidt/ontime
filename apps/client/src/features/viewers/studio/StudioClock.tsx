@@ -20,7 +20,7 @@ import './StudioClock.scss';
 
 interface StudioClockProps {
   isMirrored: boolean;
-  eventNext: OntimeEvent | null;
+  eventNext: OntimeEvent[] | null;
   time: ViewExtendedTimer;
   backstageEvents: OntimeRundown;
   selectedId: string | null;
@@ -84,7 +84,7 @@ export default function StudioClock(props: StudioClockProps) {
           className='next-title'
           style={{ fontSize: titleFontSize, height: '12.5vh', width: '100%', maxWidth: '80%' }}
         >
-          {eventNext?.title}
+          {eventNext?.[0]?.title}
         </div>
         <div
           className={`

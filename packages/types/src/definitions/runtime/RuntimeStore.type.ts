@@ -17,7 +17,7 @@ export type RuntimeStore = {
   runtime: Runtime;
   eventNow: OntimeEvent | null;
   publicEventNow: OntimeEvent | null;
-  eventNext: OntimeEvent | null;
+  eventNext: OntimeEvent[] | null;
   publicEventNext: OntimeEvent | null;
 
   // extra timers

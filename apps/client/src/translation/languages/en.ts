@@ -4,6 +4,7 @@ export const langEn = {
   'common.minutes': 'min',
   'common.now': 'Now',
   'common.next': 'Next',
+  'common.next2': 'Next 2',
   'common.public_message': 'Public message',
   'common.start_time': 'Start Time',
   'common.stage_timer': 'Stage Timer',

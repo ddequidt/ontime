@@ -24,7 +24,7 @@ import { useViewOptionsStore } from '../../common/stores/viewOptions';
 type WithDataProps = {
   backstageEvents: OntimeEvent[];
   customFields: CustomFields;
-  eventNext: OntimeEvent | null;
+  eventNext: OntimeEvent[] | null;
   eventNow: OntimeEvent | null;
   events: OntimeEvent[];
   external: Message;
@@ -70,7 +70,7 @@ const withData = <P extends WithDataProps>(Component: ComponentType<P>) => {
       useStore(runtimeStore);
     const publicSelectedId = publicEventNow?.id ?? null;
     const selectedId = eventNow?.id ?? null;
-    const nextId = eventNext?.id ?? null;
+    const nextId = eventNext?.[0]?.id ?? null;
 
     /******************************************/
     /***  + TimeManagerType                     ***/
