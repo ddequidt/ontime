@@ -178,7 +178,7 @@ class RuntimeService {
    */
   maybeUpdate(playableEvents: OntimeEvent[], affectedIds?: string[]) {
     const state = runtimeState.getState();
-    const hasLoadedElements = state.eventNow !== null || state.eventNext !== null;
+    const hasLoadedElements = state.eventNow !== null || state.eventNext?.[0] !== undefined;
     if (!hasLoadedElements) {
       return;
     }
@@ -573,10 +573,10 @@ function broadcastResult(_target: any, _propertyKey: string, descriptor: Propert
       let previous = RuntimeService.previousState?.[eventKey];
       let now = state[eventKey];
 
-      if (Array.isArray(previous)) {
+      if (previous?.[0] !== undefined) {
         previous = previous[0];
       }
-      if (Array.isArray(now)) {
+      if (now?.[0] !== undefined) {
         now = now[0];
       }
 
@@ -592,7 +592,7 @@ function broadcastResult(_target: any, _propertyKey: string, descriptor: Propert
       }
 
       // maybe the event itself has changed
-      if (!deepEqual(RuntimeService.previousState?.[eventKey], state[eventKey])) {
+      if (!deepEqual(previous, now)) {
         storeKey(eventKey);
         return;
       }
