@@ -99,8 +99,6 @@ export default function Timer(props: TimerProps) {
 
   const secondarySource = searchParams.get('secondary-src');
   const secondaryTextNow = getPropertyValue(eventNow, secondarySource);
-  const secondaryTextNext = getPropertyValue(eventNext?.[0] ?? null, secondarySource);
-  const secondaryTextNext2 = getPropertyValue(eventNext?.[1] ?? null, secondarySource);
 
   const showOverlay = pres.text !== '' && pres.visible;
   const isPlaying = time.playback !== Playback.Pause;
@@ -144,6 +142,8 @@ export default function Timer(props: TimerProps) {
 
   const defaultFormat = getDefaultFormat(settings?.timeFormat);
   const timerOptions = getTimerOptions(defaultFormat, customFields);
+
+  let timer = !stageTimer || stageTimer > 2000000 ? null : stageTimer;
 
   return (
     <div className={showFinished ? `${baseClasses} stage-timer--finished` : baseClasses} data-testid='timer-view'>
@@ -210,40 +210,48 @@ export default function Timer(props: TimerProps) {
                 animate='visible'
                 exit='exit'
               >
-                <TitleCard label='now' title={eventNow.title} secondary={secondaryTextNow} />
+                <TitleCard
+                  label={getLocalizedString(`common.now`)}
+                  title={eventNow.title}
+                  secondary={secondaryTextNow}
+                />
               </motion.div>
             )}
           </AnimatePresence>
 
-          <AnimatePresence>
-            {eventNext?.[0]?.title && (
-              <motion.div
-                className='event next'
-                key='next'
-                variants={titleVariants}
-                initial='hidden'
-                animate='visible'
-                exit='exit'
-              >
-                <TitleCard label='next' title={eventNext[0].title} secondary={secondaryTextNext} />
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <AnimatePresence>
-            {eventNext?.[1]?.title && (
-              <motion.div
-                className='event next2'
-                key='next2'
-                variants={titleVariants}
-                initial='hidden'
-                animate='visible'
-                exit='exit'
-              >
-                <TitleCard label='next2' title={eventNext[1].title} secondary={secondaryTextNext2} />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {[0, 1, 2, 3, 4].map((index) => (
+            <AnimatePresence key={index}>
+              {eventNext?.[index]?.title && (
+                <motion.div
+                  className={`event next${index}`}
+                  key='next'
+                  variants={titleVariants}
+                  initial='hidden'
+                  animate='visible'
+                  exit='exit'
+                >
+                  <TitleCard
+                    label={
+                      getLocalizedString(`common.next`) +
+                      (timer
+                        ? getFormattedTimer(
+                            (timer = timer + (index > 0 ? eventNext?.[index - 1].duration : 0)),
+                            time.timerType,
+                            getLocalizedString('common.minutes'),
+                            {
+                              removeSeconds: userOptions.hideTimerSeconds,
+                              removeLeadingZero: true,
+                            },
+                          )
+                        : '--')
+                    }
+                    title={eventNext[index].title}
+                    secondary={getPropertyValue(eventNext?.[index] ?? null, secondarySource)}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          ))}
         </>
       )}
     </div>

@@ -209,7 +209,7 @@ export function loadNext(playableEvents: OntimeEvent[]) {
     runtimeState.eventNext = [];
     for (let i = runtimeState.runtime.selectedEventIndex + 1; i < numEvents; i++) {
       // if we have not set private
-      if (nextProduction < 2) {
+      if (nextProduction < 5) {
         runtimeState.eventNext.push(playableEvents[i]);
         nextProduction++;
       }
@@ -221,7 +221,7 @@ export function loadNext(playableEvents: OntimeEvent[]) {
       }
 
       // Stop if both are set
-      if (nextPublic && nextProduction === 2) break;
+      if (nextPublic && nextProduction === 5) break;
     }
   }
 }

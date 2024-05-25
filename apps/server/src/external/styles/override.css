@@ -1,39 +1,41 @@
 :root {
-    --background-color-override: #ececec;
-    --color-override: #101010;
-    --secondary-color-override: #404040;
-    --accent-color-override: #fa5656;
-    --label-color-override: #6c6c6c;
-    --timer-color-override: #202020;
-    --card-background-color-override: #fff;
-    --card-background-color-blink-override: #339e4e;
-    --font-family-override: "Open Sans";
-    --font-family-bold-override: "Arial Black";
-    --timer-progress-bg-override: #fff;
-    --timer-progress-override: #202020;
-
-    --external-color-override: #161616;
-
-    --cuesheet-running-bg-override: #D20300;
-
-    --operator-running-bg-override: #D20300;
-    --operator-highlight-override: #FFAB33;
-
-    --studio-active: #101010;
-    --studio-idle: #cfcfcf;
-    --studio-active-label: #101010;
-    --studio-idle-label: #595959;
-    --studio-overtime: #101010;
-
-    --lowerThird-font-family-override: 'Times New Roman';
-    --lowerThird-top-font-weight-override: bold;
-    --lowerThird-bottom-font-weight-override: bold;
-    --lowerThird-top-font-style-override: normal;
-    --lowerThird-bottom-font-style-override: italic;
-    --lowerThird-line-height-override: 1vh;
-    --lowerThird-text-align-override: center;
+    --secondary-color-override: rgba(255, 255, 255, .85)
 }
 
-.timer {
-    color: black !important;
+body, html, .App {
+    overflow: auto;
+    height: auto;
+}
+
+.stage-timer .timer-container .timer {
+font-size: 8em !important;
+}
+
+.stage-timer {
+    overflow: auto;
+    height: auto;
+
+    gap: min(1vh, 6px);
+    padding: min(1vh, 6px) clamp(6px, 1vw, 6px);
+    grid-template-rows: auto 1fr auto 2fr 2fr 2fr;
+    grid-template-areas:
+        "clock"
+        "timer"
+        "progress"
+        "now"
+        "next1"
+        "next2";
+}
+
+.stage-timer .event {
+    padding: 6px 8px;
+    border-radius: 4px;
+}
+
+.title-card__title {
+    font-size: clamp(28px,3vw,50px);
+}
+
+.stage-timer .inline {
+    flex-direction: column-reverse;
 }
